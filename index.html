@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NuVision News - Your trusted source for the latest news">
+    <title>NuVision News</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>NuVision News</h1>
+                <p class="tagline">Your Vision, Our News</p>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-category="all">All</a></li>
+                    <li><a href="#" class="nav-link" data-category="technology">Technology</a></li>
+                    <li><a href="#" class="nav-link" data-category="business">Business</a></li>
+                    <li><a href="#" class="nav-link" data-category="sports">Sports</a></li>
+                    <li><a href="#" class="nav-link" data-category="entertainment">Entertainment</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="featured-section">
+                <h2 class="section-title">Featured News</h2>
+                <div id="featured-news" class="featured-news"></div>
+            </section>
+
+            <section class="news-section">
+                <h2 class="section-title">Latest Stories</h2>
+                <div class="filter-info">
+                    <span id="filter-text">Showing: All News</span>
+                </div>
+                <div id="news-grid" class="news-grid"></div>
+            </section>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Loading news...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About NuVision News</h3>
+                    <p>Delivering accurate and timely news from around the world.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">Technology</a></li>
+                        <li><a href="#">Business</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Entertainment</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: contact@nuvision-news.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 NuVision News. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

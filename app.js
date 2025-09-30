@@ -1,5 +1,125 @@
-// Sample news data
-const newsData = [
+// News data - will be loaded from JSON file
+let newsData = [];
+
+// Category mapping from JSON to app categories
+const categoryMap = {
+    'TECH': 'technology',
+    'SCIENCE': 'technology',
+    'BUSINESS': 'business',
+    'MONEY': 'business',
+    'SPORTS': 'sports',
+    'ENTERTAINMENT': 'entertainment',
+    'ARTS': 'entertainment',
+    'ARTS & CULTURE': 'entertainment',
+    'CULTURE & ARTS': 'entertainment',
+    'COMEDY': 'entertainment',
+    'STYLE': 'entertainment',
+    'STYLE & BEAUTY': 'entertainment',
+    'FOOD & DRINK': 'entertainment',
+    'TASTE': 'entertainment',
+    'MEDIA': 'entertainment',
+    'POLITICS': 'business',
+    'WORLD NEWS': 'business',
+    'WORLDPOST': 'business',
+    'THE WORLDPOST': 'business',
+    'U.S. NEWS': 'business',
+    'CRIME': 'business',
+    'EDUCATION': 'business',
+    'COLLEGE': 'business',
+    'ENVIRONMENT': 'technology',
+    'GREEN': 'technology',
+    'HEALTHY LIVING': 'entertainment',
+    'WELLNESS': 'entertainment',
+    'HOME & LIVING': 'entertainment',
+    'PARENTING': 'entertainment',
+    'PARENTS': 'entertainment',
+    'WEDDINGS': 'entertainment',
+    'DIVORCE': 'entertainment',
+    'WOMEN': 'entertainment',
+    'BLACK VOICES': 'entertainment',
+    'LATINO VOICES': 'entertainment',
+    'QUEER VOICES': 'entertainment',
+    'RELIGION': 'entertainment',
+    'TRAVEL': 'entertainment',
+    'GOOD NEWS': 'entertainment',
+    'IMPACT': 'business',
+    'WEIRD NEWS': 'entertainment',
+    'FIFTY': 'entertainment'
+};
+
+// Sample authors for generating content
+const sampleAuthors = [
+    'Sarah Johnson', 'Michael Chen', 'David Martinez', 'Emily Watson',
+    'Jessica Lee', 'Robert Taylor', 'Amanda White', 'Chris Anderson',
+    'Nicole Brown', 'Kevin Wright', 'Lisa Garcia', 'Brian Miller'
+];
+
+// Transform JSON data to match app format
+function transformNewsData(rawData) {
+    return rawData.map((item, index) => {
+        // Get category or default to 'technology'
+        let category = 'technology';
+        if (item.category) {
+            category = categoryMap[item.category.toUpperCase()] || 'technology';
+        }
+
+        // Extract title (first 100 chars of content)
+        const title = item.content ? item.content.substring(0, 100).trim() + (item.content.length > 100 ? '...' : '') : 'News Article';
+        
+        // Extract description (next 200 chars)
+        const description = item.content && item.content.length > 100 
+            ? item.content.substring(100, 300).trim() + (item.content.length > 300 ? '...' : '')
+            : item.content || 'Read more to find out details about this news article.';
+
+        // Random author
+        const author = sampleAuthors[Math.floor(Math.random() * sampleAuthors.length)];
+
+        // Generate a date in the past 30 days
+        const daysAgo = Math.floor(Math.random() * 30);
+        const date = new Date();
+        date.setDate(date.getDate() - daysAgo);
+        const dateString = date.toISOString().split('T')[0];
+
+        // Placeholder image based on category
+        const imageMap = {
+            'technology': 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&h=600&fit=crop',
+            'business': 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop',
+            'sports': 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=800&h=600&fit=crop',
+            'entertainment': 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&h=600&fit=crop'
+        };
+
+        return {
+            id: item.id !== undefined ? item.id : index,
+            title: title,
+            description: description,
+            category: category,
+            author: author,
+            date: dateString,
+            image: imageMap[category],
+            featured: index === 0 // First item is featured
+        };
+    });
+}
+
+// Load news data from JSON file
+async function loadNewsData() {
+    try {
+        showLoading(true);
+        const response = await fetch('nuvision_2k.json');
+        const rawData = await response.json();
+        newsData = transformNewsData(rawData);
+        console.log(`Loaded ${newsData.length} news articles`);
+        showLoading(false);
+        return true;
+    } catch (error) {
+        console.error('Error loading news data:', error);
+        showLoading(false);
+        return false;
+    }
+}
+
+// Sample news data (fallback if JSON load fails)
+const sampleNewsData = [
     {
         id: 1,
         title: "Revolutionary AI Technology Transforms Healthcare Industry",
@@ -115,7 +235,15 @@ const newsData = [
 let currentCategory = 'all';
 
 // Initialize the application
-function init() {
+async function init() {
+    // Load news data from JSON
+    const loaded = await loadNewsData();
+    
+    // If loading failed, use sample data
+    if (!loaded || newsData.length === 0) {
+        newsData = sampleNewsData;
+    }
+    
     setupEventListeners();
     displayFeaturedNews();
     displayNews(currentCategory);
